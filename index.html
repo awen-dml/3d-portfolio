@@ -568,9 +568,33 @@
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".contact-form");
     const successMessage = document.querySelector(".form-success");
+    
+    // DDoS Protection
+    let lastSubmissionTime = 0;
+    const minTimeBetweenSubmissions = 5000; // 5 detik
+    let submissionAttempts = 0;
+    const maxAttempts = 5;
+    const resetTime = 60000; // 1 menit
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+
+      // Rate limiting - cek waktu antara pengiriman
+      const currentTime = Date.now();
+      if (currentTime - lastSubmissionTime < minTimeBetweenSubmissions) {
+        alert("Terlalu banyak permintaan. Tunggu beberapa saat lagi.");
+        return;
+      }
+
+      // Batas percobaan pengiriman
+      submissionAttempts++;
+      if (submissionAttempts > maxAttempts) {
+        alert("Terlalu banyak percobaan pengiriman. Tunggu 1 menit.");
+        setTimeout(() => {
+          submissionAttempts = 0;
+        }, resetTime);
+        return;
+      }
 
       // Tampilkan loading state
       const submitBtn = form.querySelector('.btn-submit');
@@ -588,11 +612,15 @@
         reply_to: document.getElementById("email").value
       };
 
+      // Update waktu terakhir pengiriman
+      lastSubmissionTime = currentTime;
+
       // Ganti TEMPLATE_ID dengan template ID dari EmailJS
       emailjs.send("service_yx75lao", "template_uhxkjyk", templateParams)
         .then(() => {
           successMessage.style.display = "block";
           form.reset();
+          submissionAttempts = 0; // Reset counter jika berhasil
           
           // Reset button
           submitBtn.innerHTML = originalText;
