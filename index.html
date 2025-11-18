@@ -626,6 +626,31 @@
         });
     });
   });
+
+document.addEventListener("DOMContentLoaded", () => {
+const viewer = document.querySelector("spline-viewer");
+
+function hideLogo() {
+  const shadow = viewer.shadowRoot;
+  if (!shadow) return;
+
+  const logo = shadow.querySelector("#logo");
+  if (!logo) return;
+
+  // Tambahkan style khusus untuk override
+  const style = document.createElement("style");
+  style.textContent = `
+    #logo {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+  `;
+  shadow.appendChild(style);
+}
+
+setTimeout(hideLogo, 300);
+});
 </script>
   </body>
 </html>

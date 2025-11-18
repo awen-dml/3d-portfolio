@@ -12,6 +12,7 @@ body {
   line-height: 1.5;
 }
 
+
 /* Gradient and Layer Blue Effect */
 .image-gradient{
   position: absolute;
@@ -608,6 +609,9 @@ section {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .robot-3d {
+    display: none;
+  }
   .benefits-grid,
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1611,3 +1615,4 @@ footer {
     min-height: 70vh;
   }
 }
+
